@@ -134,7 +134,13 @@ EOF
     print_info "Listing available stations..."
     python3 "$SCRIPT_DIR/wl_logger.py" --list-stations 2>/dev/null || print_warning "Could not list stations. Make sure credentials are correct."
 
-    read -rp "Enter your Station ID: " STATION_ID
+    while true; do
+        read -rp "Enter the numeric Station ID from the list above (not the station name): " STATION_ID
+        if [[ "$STATION_ID" =~ ^[0-9]+$ ]]; then
+            break
+        fi
+        print_warning "Station ID must be numeric (e.g. 193218) — copy the \"Station ID:\" value shown above, not the \"Name:\" value."
+    done
 
     python3 << EOF
 import json
